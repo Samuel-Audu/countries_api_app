@@ -1,17 +1,34 @@
 import 'package:countries_app/model/country_model.dart';
 import 'package:countries_app/provider/country_data_provider.dart';
 import 'package:countries_app/screens/detailsScreen/details_portrait.dart';
+import 'package:countries_app/widgets/buttons.dart';
 import 'package:countries_app/widgets/country_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreenPortrait extends ConsumerWidget {
+  
   const HomeScreenPortrait({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final controller = TextEditingController();
+
     final country = ref.watch(apiDataProvider);
+
+    final List regions = [];
+
+    final countryList = country.when(
+      data: (country){
+        final filteredCountries = country!.where((element) => regions.any(((e) => element.region==e))).toList();
+        final sortedList = country.sort((a,b)=>a.name!.common.toString().compareTo(b.name!.common.toString()));
+      }, 
+      error: ((error, stackTrace) => Text(error.toString())), 
+      loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ));
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -38,9 +55,13 @@ class HomeScreenPortrait extends ConsumerWidget {
               //container of search country
               Container(
                 decoration: BoxDecoration(color: Colors.grey[200]),
-                child: const TextField(
+                child: TextField(
+                  controller: controller,
+                  onChanged: (value) {
+                    null;
+                  },
                   textAlign: TextAlign.center,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Search Country',
                       prefixIcon: Icon(Icons.search)),
@@ -53,37 +74,12 @@ class HomeScreenPortrait extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey.shade200,
-                      ),
-                    ),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.language),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text('EN')
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey.shade200,
-                      ),
-                    ),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.filter_alt_outlined),
-                        Text('Filter')
-                      ],
-                    ),
-                  )
+                  MyButton(
+                    buttonName: 'EN', 
+                    icon: Icons.language_outlined),
+                  MyButton( 
+                    buttonName: 'Filter', 
+                    icon: Icons.filter_alt_outlined)
                 ],
               ),
               const SizedBox(
@@ -92,25 +88,28 @@ class HomeScreenPortrait extends ConsumerWidget {
               //list of countries and their letters
               country.when(
                   data: (country) {
+                    final filteredCountries = country!.where((element) => regions.any(((e) => element.region==e))).toList();
                     List<Country> countryList =
-                        country!.map((e) => e).toList();
+                        country.map((e) => e).toList();
 
                     var sortedList = countryList;
                       sortedList.sort((a,b)=>a.name!.common.toString().compareTo(b.name!.common.toString()));
 
+                    var displayList = List<Country>.from(sortedList);
+
                     return Expanded(
                         child: ListView.builder(
-                            itemCount: sortedList.length,
+                            itemCount: displayList.length,
                             itemBuilder: ((context, index) {
                     
                               return CountryTile(
-                                  name: sortedList[index].name!.common.toString(),
-                                  capital: sortedList[index].capital!.isEmpty?'':
-                              sortedList[index].capital![0].toString(), 
-                                  image:sortedList[index].flags!.png.toString(), 
+                                  name: displayList[index].name!.common.toString(),
+                                  capital: displayList[index].capital!.isEmpty?'':
+                              displayList[index].capital![0].toString(), 
+                                  image:displayList[index].flags!.png.toString(), 
                                   onTap: () => Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => DetailsPagePortriat(e: sortedList[index],))));
+                                      builder: (context) => DetailsPagePortriat(e: displayList[index],))));
                             })));
                   },
                   error: ((error, stackTrace) => Text(error.toString())),
@@ -124,4 +123,6 @@ class HomeScreenPortrait extends ConsumerWidget {
       ),
     );
   }
+  
 }
+

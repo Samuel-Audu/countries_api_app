@@ -1,9 +1,10 @@
 import 'package:countries_app/model/country_model.dart';
+import 'package:countries_app/screens/detailsScreen/infos.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class DetailsPagePortriat extends StatelessWidget {
-   DetailsPagePortriat({super.key, required this.e});
+  DetailsPagePortriat({super.key, required this.e});
   final Country e;
 
   CarouselController carouselController = CarouselController();
@@ -11,86 +12,97 @@ class DetailsPagePortriat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text(e.name!.common.toString(),
-        style: TextStyle(
-          color: Colors.black
-        ),)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Padding(
-          padding: const EdgeInsets.all(24.0),
+        appBar: AppBar(
+          foregroundColor: Colors.black,
+          centerTitle: true,
+          title: Text(
+            e.name!.common.toString(),
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 380,
+              Container(
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(8)),
                 height: 200,
-                child: Stack(
+                width: 380,
+                child: PageView(
                   children: [
-                    CarouselSlider(
-                        carouselController: carouselController,
-                        items: [
-                          Container(
-                            margin: EdgeInsets.all(6.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              image: DecorationImage(
-                                image: NetworkImage(e.flags!.png.toString()),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            margin: EdgeInsets.all(6.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              image: DecorationImage(
-                                image: NetworkImage(e.coatOfArms!.png.toString()),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                        ], options: CarouselOptions(
-                      height: 250.0,
-                      // enlargeCenterPage: true,
-                      // autoPlay: true,
-                      // autoPlayAnimationDuration: Duration(milliseconds: 800),
-                      viewportFraction: 1,
-                    )),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        onPressed: () {
-                          // Use the controller to change the current page
-                          carouselController.previousPage();
-                        },
-                        icon: Icon(Icons.arrow_circle_left_outlined),
-                      ),
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                              image: NetworkImage(e.flags!.png.toString()))),
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        onPressed: () {
-                          // Use the controller to change the current page
-                          carouselController.nextPage();
-                        },
-                        icon: Icon(Icons.arrow_circle_right_outlined),
-                      ),
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                              image:
+                                  NetworkImage(e.coatOfArms!.png.toString()))),
                     ),
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  e.maps!.openStreetMaps.toString()))),
+                    )
                   ],
                 ),
               ),
-              Text(e.name!.official.toString()),
-              Text(e.population.toString()),
-              Text(e.capital!.isEmpty? '': e.capital![0].toString()),
-              Text(e.startOfWeek.toString()),
-              Text(e.timezones![0]),
+              const SizedBox(
+                height: 24.5,
+              ),
+              CountryInfo(
+                  firstinfo: 'Population:',
+                  firstanswer: e.population.toString(),
+                  secondinfo: 'Region:',
+                  secondanswer: e.region.toString(),
+                  thirdinfo: 'Capital:',
+                  thirdanswer: e.capital!.isEmpty? '': e.capital![0].toString(),
+                  fourthinfo: 'Motto',
+                  fourthanswer: 'Not provided in database'),
+              CountryInfo(
+                  firstinfo: 'Official language:',
+                  firstanswer: e.languages!.eng.toString(),
+                  secondinfo: 'Ethnic group:',
+                  secondanswer: 'Not provided in database',
+                  thirdinfo: 'Religion:',
+                  thirdanswer: 'Not provided in database',
+                  fourthinfo: 'Government:',
+                  fourthanswer: 'Not provided in database'),
+              CountryInfo(
+                  firstinfo: 'Independence:',
+                  firstanswer: e.independent==true?'Yes':'No',
+                  secondinfo: 'Area:',
+                  secondanswer: e.area.toString(),
+                  thirdinfo: 'Currency:',
+                  thirdanswer: e.currencies!.bBD!.name.toString(),
+                  fourthinfo: 'GDP:',
+                  fourthanswer: 'Not provided in database'),
+              CountryInfo(
+                  firstinfo: 'Time zone:',
+                  firstanswer: e.timezones.toString(),
+                  secondinfo: 'Date format:',
+                  secondanswer: 'dd/mm/yyyy',
+                  thirdinfo: 'Dialling code:',
+                  thirdanswer: e.idd!.root.toString()+e.idd!.suffixes.toString(),
+                  fourthinfo: 'Driving side:',
+                  fourthanswer: e.car!.side.toString())    
+              
             ],
           ),
-        ),
-    );
+        ));
   }
 }
