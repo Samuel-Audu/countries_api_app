@@ -20,5 +20,25 @@ final searchProvider = StateProvider<List<Country>?>((ref){
   return searchList;
 });
 
- final searchedListProvider = StateProvider<List<Country>?>((_) => []);
+ final searchedCountryProvider = StateProvider<List<Country>?>((_) => _.watch(searchProvider));
+
+ final searchedCountryTextProvided = StateProvider<String>((ref) => '');
+
+ final countriesList = StateProvider<List<Country>?>((ref) {
+  final searchText = ref.watch(searchedCountryTextProvided);
+    // ignore: deprecated_member_use
+  final searchedCountry = ref.watch(searchedCountryProvider.state).state;
+
+  List<Country>? searchResult = [];
+
+  if(searchText.isEmpty){
+      searchResult = searchedCountry;
+    }else{
+      searchResult = searchedCountry!.where((element) =>
+        element.name!.common!.toLowerCase().contains(searchText.toLowerCase())).toList();
+    }
+
+  return searchResult;
+ });
  
+
