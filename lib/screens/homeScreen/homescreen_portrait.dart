@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:countries_app/model/country_model.dart';
 import 'package:countries_app/provider/country_data_provider.dart';
 import 'package:countries_app/screens/detailsScreen/details_portrait.dart';
@@ -15,17 +17,18 @@ class HomeScreenPortrait extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = TextEditingController();
 
-   
-
-    final countrySearchedFor = StateProvider<String>((_) => '');
-
-
-    final country = ref.watch(searchProvider);
+    final country = ref.watch(countriesList.state).state;
 
     final List<Country>? countries = country;
     var sortedList = countries;
                       sortedList!.sort((a,b)=>a.name!.common.toString().compareTo(b.name!.common.toString()));
 
+
+  
+    
+
+
+    
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -54,14 +57,9 @@ class HomeScreenPortrait extends ConsumerWidget {
                 decoration: BoxDecoration(color: Colors.grey[200]),
                 child: TextField(
                   controller: controller,
-                  onChanged: (value) {
-                    final suggestions = sortedList.where((element){
-                      final countryName = element.name!.common!.toLowerCase();
-                      final input = value.toLowerCase();
-
-                      return countryName.contains(input); 
-                    }).toList();
-                    
+                  onSubmitted: (value) {
+                  
+                    ref.read(searchedCountryTextProvided.state).state= value;
                   },
                   textAlign: TextAlign.center,
                   decoration: const InputDecoration(
