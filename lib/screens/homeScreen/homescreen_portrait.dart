@@ -15,19 +15,16 @@ class HomeScreenPortrait extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = TextEditingController();
 
-    final country = ref.watch(apiDataProvider);
+   
 
-    final List regions = [];
+    final countrySearchedFor = StateProvider<String>((_) => '');
 
-    final countryList = country.when(
-      data: (country){
-        final filteredCountries = country!.where((element) => regions.any(((e) => element.region==e))).toList();
-        final sortedList = country.sort((a,b)=>a.name!.common.toString().compareTo(b.name!.common.toString()));
-      }, 
-      error: ((error, stackTrace) => Text(error.toString())), 
-      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ));
+
+    final country = ref.watch(searchProvider);
+
+    final List<Country>? countries = country;
+    var sortedList = countries;
+                      sortedList!.sort((a,b)=>a.name!.common.toString().compareTo(b.name!.common.toString()));
 
     return Scaffold(
       body: SafeArea(
@@ -58,7 +55,13 @@ class HomeScreenPortrait extends ConsumerWidget {
                 child: TextField(
                   controller: controller,
                   onChanged: (value) {
-                    null;
+                    final suggestions = sortedList.where((element){
+                      final countryName = element.name!.common!.toLowerCase();
+                      final input = value.toLowerCase();
+
+                      return countryName.contains(input); 
+                    }).toList();
+                    
                   },
                   textAlign: TextAlign.center,
                   decoration: const InputDecoration(
@@ -86,43 +89,27 @@ class HomeScreenPortrait extends ConsumerWidget {
                 height: 10,
               ),
               //list of countries and their letters
-              country.when(
-                  data: (country) {
-                    final filteredCountries = country!.where((element) => regions.any(((e) => element.region==e))).toList();
-                    List<Country> countryList =
-                        country.map((e) => e).toList();
-
-                    var sortedList = countryList;
-                      sortedList.sort((a,b)=>a.name!.common.toString().compareTo(b.name!.common.toString()));
-
-                    var displayList = List<Country>.from(sortedList);
-
-                    return Expanded(
+              Expanded(
                         child: ListView.builder(
-                            itemCount: displayList.length,
+                            itemCount: sortedList.length,
                             itemBuilder: ((context, index) {
                     
                               return CountryTile(
-                                  name: displayList[index].name!.common.toString(),
-                                  capital: displayList[index].capital!.isEmpty?'':
-                              displayList[index].capital![0].toString(), 
-                                  image:displayList[index].flags!.png.toString(), 
+                                  name: sortedList[index].name!.common.toString(),
+                                  capital: sortedList[index].capital!.isEmpty?'':
+                              sortedList[index].capital![0].toString(), 
+                                  image:sortedList[index].flags!.png.toString(), 
                                   onTap: () => Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => DetailsPagePortriat(e: displayList[index],))));
-                            })));
-                  },
-                  error: ((error, stackTrace) => Text(error.toString())),
-                  loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ))
+                                      builder: (context) => DetailsPagePortriat(e: sortedList[index],))));
+                            })))
               //list tile will contain
             ],
           ),
         ),
       ),
     );
+    
   }
-  
 }
 

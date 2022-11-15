@@ -13,4 +13,12 @@ final apiDataProvider = FutureProvider<List<Country>?>((ref) async{
 });
 
 
+final searchProvider = StateProvider<List<Country>?>((ref){
+  // We return the default sort type, here name.
+  final searchList = ref.watch(apiDataProvider).value;
+
+  return searchList;
+});
+
+ final searchedListProvider = StateProvider<List<Country>?>((_) => []);
  
