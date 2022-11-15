@@ -23,4 +23,4 @@ First time i got to work with apis so it was really tedious as the data was in a
 https://drive.google.com/file/d/1ykWWt3Bs0G8fuCOtnbQMEJ3XToWerXFZ/view?usp=sharing
 
 # Appetizer link
-https://appetize.io/app/46gry3xxnjff5utke4jr5i2ovi?device=pixel4&osVersion=12.0&scale=75
+https://appetize.io/app/cz4jx5mfljm6tnh3w3jznpzvzu?device=pixel4&osVersion=12.0&scale=75
