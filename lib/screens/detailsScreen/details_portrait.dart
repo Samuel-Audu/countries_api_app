@@ -29,7 +29,7 @@ class DetailsPagePortriat extends StatelessWidget {
               Container(
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                height: 200,
+                height: 190,
                 width: 380,
                 child: PageView(
                   children: [
@@ -41,7 +41,7 @@ class DetailsPagePortriat extends StatelessWidget {
                               image: NetworkImage(e.flags!.png.toString()))),
                     ),
                     Container(
-                      height: 200,
+                      height: 195,
                       decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(8),
@@ -49,20 +49,11 @@ class DetailsPagePortriat extends StatelessWidget {
                               image:
                                   NetworkImage(e.coatOfArms!.png.toString()))),
                     ),
-                    Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  e.maps!.openStreetMaps.toString()))),
-                    )
                   ],
                 ),
               ),
               const SizedBox(
-                height: 24.5,
+                height: 10,
               ),
               CountryInfo(
                   firstinfo: 'Population:',
@@ -73,9 +64,9 @@ class DetailsPagePortriat extends StatelessWidget {
                   thirdanswer: e.capital!.isEmpty? '': e.capital![0].toString(),
                   fourthinfo: 'Motto',
                   fourthanswer: 'Not provided in database'),
-              CountryInfo(
+              const CountryInfo(
                   firstinfo: 'Official language:',
-                  firstanswer: e.languages!.eng.toString(),
+                  firstanswer: 'English',
                   secondinfo: 'Ethnic group:',
                   secondanswer: 'Not provided in database',
                   thirdinfo: 'Religion:',
@@ -88,7 +79,7 @@ class DetailsPagePortriat extends StatelessWidget {
                   secondinfo: 'Area:',
                   secondanswer: e.area.toString(),
                   thirdinfo: 'Currency:',
-                  thirdanswer: e.currencies!.bBD!.name.toString(),
+                  thirdanswer: 'Naira',
                   fourthinfo: 'GDP:',
                   fourthanswer: 'Not provided in database'),
               CountryInfo(

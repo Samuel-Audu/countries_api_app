@@ -26,7 +26,7 @@ class CountryInfo extends StatelessWidget {
             Text(firstanswer,),
           ],
         ),
-        const SizedBox(height: 8,),
+        const SizedBox(height: 4,),
         Row(
           children: [
             Text(secondinfo,
@@ -37,7 +37,7 @@ class CountryInfo extends StatelessWidget {
             Text(secondanswer,),
           ],
         ),
-        const SizedBox(height: 8,),
+        const SizedBox(height: 4,),
         Row(
           children: [
             Text(thirdinfo,
@@ -48,7 +48,7 @@ class CountryInfo extends StatelessWidget {
             Text(thirdanswer,),
           ],
         ),
-        const SizedBox(height: 8,),
+        const SizedBox(height: 4,),
         Row(
           children: [
             Text(fourthinfo,
@@ -59,7 +59,7 @@ class CountryInfo extends StatelessWidget {
             Text(fourthanswer,),
           ],
         ),
-        const SizedBox(height: 28,),
+        const SizedBox(height: 15,),
       ],
     );
   }
